@@ -1,6 +1,6 @@
 package login_regist;
 
-import java.awt.BorderLayout;
+import java.awt.BorderLayout; 
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
@@ -30,27 +30,33 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.LineBorder;
 
+import layout.MainApp;
+import models.RegistMemberVO;
+
 
 public class LoginPage extends JPanel {
    
-	private static final String url = "jdbc:oracle:thin:@localhost:1521:XE";
+	private static final String url = "jdbc:oracle:thin:@localhost:1521:ORCL";
 	private static final String user = "user1104"; // DB ID
 	private static final String pass = "1234"; // DB 패스워드
 	DBManager dbManager;
 	Connection con;
-
+	RegistMemberVO registMemberVO;
+	MainApp mainApp;
 	
    public static final int WIDTH = 450;
    public static final int HEIGHT = 630;
    
 
    private JFrame frame;
-   private JTextField t_id;
+   public JTextField t_email;
    private JTextField t_askEmail;
    JPanel p_findPass;
    JPanel opaqPanel;
    private JPasswordField t_password;
-   private JCheckBox check_isSetEmail;
+   private JCheckBox check_isSetId;
+
+
   
    RegistForm registForm = new RegistForm();
 
@@ -92,7 +98,8 @@ public class LoginPage extends JPanel {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize(DBManager dbManager) {
-		this.dbManager = dbManager;
+		
+		
 		frame = new JFrame();
 		frame.setResizable(false);
 		frame.setBounds(100, 100, WIDTH, HEIGHT);
@@ -128,29 +135,30 @@ public class LoginPage extends JPanel {
       panel.add(c_panel, BorderLayout.CENTER);
       c_panel.setLayout(null);
       
-      t_id = new JTextField(30);
-      t_id.setFont(new Font("Arial Black", Font.BOLD, 21));
-      t_id.setBorder(new LineBorder(new Color(0, 0, 0), 2, true));
-      t_id.setBounds(101, 232, 231, 48);
-      c_panel.add(t_id);
-      t_id.setColumns(10);
+     
+      t_email = new JTextField(30);
+      t_email.setFont(new Font("Arial Black", Font.BOLD, 21));
+      t_email.setBorder(new LineBorder(new Color(0, 0, 0), 2, true));
+      t_email.setBounds(101, 232, 231, 48);
+      c_panel.add(t_email);
+      t_email.setColumns(10);
       
-      JLabel id_label = new JLabel("ID");
-      id_label.setFont(new Font("Arial Black", Font.BOLD, 22));
-      id_label.setBounds(198, 200, 191, 32);
-      c_panel.add(id_label);
+      JLabel email_label = new JLabel("E-Mail");
+      email_label.setFont(new Font("Arial Black", Font.BOLD, 22));
+      email_label.setBounds(180, 200, 191, 32);
+      c_panel.add(email_label);
       
       JLabel pass_label = new JLabel("PASSWORD");
       pass_label.setFont(new Font("Arial Black", Font.BOLD, 22));
       pass_label.setBounds(141, 290, 191, 22);
       c_panel.add(pass_label);
       
-      JCheckBox check_isSetEmail = new JCheckBox("아이디 저장");
-      check_isSetEmail.setMargin(new Insets(0, 0, 0, 0));
-      check_isSetEmail.setBackground(SystemColor.controlLtHighlight);
-      check_isSetEmail.setFont(new Font("HY견고딕", Font.PLAIN, 15));
-      check_isSetEmail.setBounds(99, 372, 112, 23);
-      c_panel.add(check_isSetEmail);
+      JCheckBox check_isSetId = new JCheckBox("이메일 저장");
+      check_isSetId.setMargin(new Insets(0, 0, 0, 0));
+      check_isSetId.setBackground(SystemColor.controlLtHighlight);
+      check_isSetId.setFont(new Font("HY견고딕", Font.PLAIN, 15));
+      check_isSetId.setBounds(99, 372, 112, 23);
+      c_panel.add(check_isSetId);
       
       JButton bt_login = new JButton("로그인");
       bt_login.setBackground(new Color(0, 153, 51));
@@ -191,9 +199,9 @@ public class LoginPage extends JPanel {
             System.out.println("비밀번호찾기");
             p_findPass.setVisible(true);
             opaqPanel.setVisible(true);//메일보내기
-            t_id.setEnabled(false);
+            t_email.setEnabled(false);
             t_password.setEnabled(false);
-            check_isSetEmail.setEnabled(false);
+            check_isSetId.setEnabled(false);
             bt_login.setEnabled(false);
          }
       });
@@ -229,9 +237,9 @@ public class LoginPage extends JPanel {
     	  mailing.send(askEmail);
          p_findPass.setVisible(false);
          opaqPanel.setVisible(false);
-         t_id.setEnabled(true);
+         t_email.setEnabled(true);
          t_password.setEnabled(true);
-         check_isSetEmail.setEnabled(true);
+         check_isSetId.setEnabled(true);
          bt_login.setEnabled(true);
        
       });
@@ -264,20 +272,42 @@ public class LoginPage extends JPanel {
    public void login() {
 		PreparedStatement pstmt=null;
 		ResultSet rs=null;
+		dbManager = new DBManager();
 	
 		
-		String sql="select * from RegistMember where member_id=? and member_password=?";
+		String sql="select * from RegistMember where member_email=? and member_password=?";
 		try {
 			con = DriverManager.getConnection(url, user, pass);
 			pstmt=con.prepareStatement(sql); //쿼리문 준비 
-			pstmt.setString(1, t_id.getText());
+			pstmt.setString(1, t_email.getText());
 			pstmt.setString(2, new String(t_password.getPassword()));
 			
 			rs = pstmt.executeQuery();
 			if(rs.next()) { //레코드가 존재한다면...회원인증 성공 
+				MainApp mainApp = new MainApp();
 				
 				
-				JOptionPane.showMessageDialog(this, "인증성공");
+				JOptionPane.showMessageDialog(this, "사용자"+t_email.getText()+"로 접속합니다");
+				
+				
+				
+				//로그인을 성공했을때 회원정보를 보관 + 인증변수도 true로...
+				mainApp.setHasSession(true);
+				
+				//회원정보 채워넣기!!
+				RegistMemberVO registMemberVO = new RegistMemberVO();//빈 멤버객체
+				registMemberVO.setMember_no(rs.getInt("member_no"));//pk
+				registMemberVO.setMember_name(rs.getString("member_name"));
+				registMemberVO.setMember_email(rs.getString("member_email"));
+				registMemberVO.setMember_id(rs.getString("member_id"));
+				registMemberVO.setMember_password(rs.getString("member_password"));
+				registMemberVO.setMember_rank(rs.getString("member_rank"));
+				
+				mainApp.setRegistMemberVO(registMemberVO); //mainApp에 registMemberVO 
+				
+				loginHide();
+				mainApp.frame.setVisible(true);
+				mainApp.la_userName.setText(mainApp.getRegistMemberVO().getMember_id());
 				
 			}else {
 				JOptionPane.showMessageDialog(this, "로그인 정보가 올바르지 않습니다");

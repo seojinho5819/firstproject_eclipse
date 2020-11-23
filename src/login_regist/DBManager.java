@@ -1,10 +1,12 @@
 package login_regist;
-import java.sql.*; 
-import java.util.Vector;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import javax.swing.table.DefaultTableModel;
+
+import models.RegistMemberVO;
 
 
  
@@ -14,12 +16,18 @@ public class DBManager extends JFrame{
     private static final String driver
         = "oracle.jdbc.driver.OracleDriver";
     private static final String url
-        = "jdbc:oracle:thin:@localhost:1521:XE";
+        = "jdbc:oracle:thin:@localhost:1521:ORCl";
    
     private static final String user = "user1104"; //DB ID
     private static final String pass = "1234"; //DB 패스워드
     
+    
+  //로그인 상태 여부를 보관할 변수 
+    private boolean hasSession=false;//세션을 보유하고 있는지...
+    
+    
     RegistForm registForm;
+    RegistMemberVO registMemberVO;
     private Connection con;
     public DBManager() {
     	this.getConnection();
@@ -55,9 +63,6 @@ public class DBManager extends JFrame{
 			}
 		}
 	}
-    public Connection getCon() {
-		return con;
-	}
-    
+   
 }
    
