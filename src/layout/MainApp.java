@@ -1,6 +1,6 @@
 package layout;
 
-import java.awt.BorderLayout;
+import java.awt.BorderLayout; 
 import java.awt.Choice;
 import java.awt.Color;
 import java.awt.Cursor;
@@ -39,9 +39,9 @@ import javax.swing.border.LineBorder;
 import javax.swing.border.MatteBorder;
 import javax.swing.border.TitledBorder;
 
-import login_regist.LoginPage;
 import models.ChatVO;
 import models.RegistMemberVO;
+import ui.LoginPage;
 import utill.Chat_lib;
 import utill.DBManager;
 
@@ -52,7 +52,7 @@ public class MainApp {
 	public JTextField t_chat_pop_name;
 	JTextField t_board_pop_name;
 	DBManager dbManager;
-	LoginPage loginPage;
+	public LoginPage loginPage;
 
 	/*---------------------------------------------------------------
 	* 접곡관련 변수
@@ -108,22 +108,23 @@ public class MainApp {
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					MainApp window = new MainApp();
-					window.frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+	
 
 	/**
 	 * Create the application.
 	 */
+	///////////////////////////////////
+	
+	private static MainApp instance = null;
+	public static MainApp getInstance() {
+		if(instance == null) {
+			instance = new MainApp();
+		}
+		return instance;
+	}
+	
+	//////////////////////////////////
+	
 	public MainApp() {
 		/*------------------------------------------------------
 		* 외부 클래스 new 하는곳 
@@ -140,6 +141,8 @@ public class MainApp {
 
 		chatVO = new ChatVO();
 		chat_lib = new Chat_lib(this);
+		
+		loginPage = LoginPage.getInstance();
 		
 		initialize();
 
@@ -828,7 +831,16 @@ public class MainApp {
 			@Override
 			public void mouseReleased(MouseEvent e) {
 				// TODO Auto-generated method stub
-				loginPage = new LoginPage();
+				System.out.println(loginPage);
+				Object k = new Object();
+				
+				if(loginPage.check_isSetId.isSelected()) {
+					System.out.println("check");
+				}else {
+					System.out.println("uncheck");
+					
+				}
+					
 				
 				loginPage.loginShow();
 				frame.dispose();

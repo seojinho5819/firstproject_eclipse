@@ -16,8 +16,8 @@ import java.sql.SQLException;
 
 public class DBManager {
 	private String driver="oracle.jdbc.driver.OracleDriver";
-	private String url="jdbc:oracle:thin:@localhost:1521:ORCL";
-	private String user="user1104";
+	private String url="jdbc:oracle:thin:@localhost:1521:XE";
+	private String user="user1124";
 	private String password="1234";
 	
 	//이 메서드를 호출하는 자는 Connection 객체를 반환받을수 있도록..
