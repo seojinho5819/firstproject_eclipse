@@ -67,7 +67,7 @@ public class LoginPage extends Page {
 		return instance;
 	}
 
-	private LoginPage() {
+	public LoginPage() {
 		frame = new JFrame();
 		t_email = new JTextField(30);
 		t_askEmail = new JTextField(50);

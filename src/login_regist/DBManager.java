@@ -17,7 +17,7 @@ public class DBManager extends JFrame {
 	private static final String driver = "oracle.jdbc.driver.OracleDriver";
 	private static final String url = "jdbc:oracle:thin:@localhost:1521:XE";
 
-	private static final String user = "user1124"; // DB ID
+	private static final String user = "user1104"; // DB ID
 	private static final String pass = "1234"; // DB 패스워드
 
 	// 로그인 상태 여부를 보관할 변수

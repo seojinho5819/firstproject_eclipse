@@ -832,16 +832,18 @@ public class MainApp {
 			public void mouseReleased(MouseEvent e) {
 				// TODO Auto-generated method stub
 				System.out.println(loginPage);
-				Object k = new Object();
+				
 				
 				if(loginPage.check_isSetId.isSelected()) {
 					System.out.println("check");
+					loginPage.t_password.setText("");
 				}else {
 					System.out.println("uncheck");
+					loginPage.t_password.setText("");
+					loginPage.t_email.setText("");
 					
 				}
 					
-				
 				loginPage.loginShow();
 				frame.dispose();
 				

@@ -29,10 +29,12 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.border.LineBorder;
 
+import ui.LoginPage;
+
 public class RegistForm extends JFrame {
 
 	private static final String url = "jdbc:oracle:thin:@localhost:1521:XE";
-	private static final String user = "user1124"; // DB ID
+	private static final String user = "user1104"; // DB ID
 	private static final String pass = "1234"; // DB 패스워드
 
 	public static final int WIDTH = 450;
